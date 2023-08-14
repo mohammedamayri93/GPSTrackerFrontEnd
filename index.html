@@ -23,6 +23,9 @@
         </div>
 
         <div id="map" class="mb-4"></div>
+
+        <!-- Last Update Time -->
+        <div id="lastUpdate" class="text-muted"></div>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -48,23 +51,14 @@
                 L.marker([coordinates.latitude, coordinates.longitude]).addTo(map)
                     .bindPopup(`<div class="popup-text">Latest Location</div><div>Latitude: ${coordinates.latitude}</div><div>Longitude: ${coordinates.longitude}</div>`)
                     .openPopup();
+
+                // Update last update time
+                const lastUpdateElement = document.getElementById('lastUpdate');
+                lastUpdateElement.textContent = `Last Update Time: ${new Date(coordinates.timestamp).toLocaleTimeString()}`;
             }
         }
 
         async function refreshMapPeriodically() {
             while (true) {
                 await updateMap();
-                await new Promise(resolve => setTimeout(resolve, 5000)); // Refresh every 5 seconds
-            }
-        }
-
-        // Initial update and start automatic refreshing
-        async function init() {
-            await updateMap();
-            refreshMapPeriodically();
-        }
-
-        window.onload = init;
-    </script>
-</body>
-</html>
+                await new Promise(resolve =>
