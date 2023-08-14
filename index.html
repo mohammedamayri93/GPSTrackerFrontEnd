@@ -61,4 +61,17 @@
         async function refreshMapPeriodically() {
             while (true) {
                 await updateMap();
-                await new Promise(resolve =>
+                await new Promise(resolve => setTimeout(resolve, 5000)); // Refresh every 5 seconds
+            }
+        }
+
+        // Initial update and start automatic refreshing
+        async function init() {
+            await updateMap();
+            refreshMapPeriodically();
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
