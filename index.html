@@ -9,31 +9,36 @@
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
-        async function fetchLatestCoordinates() {
-            try {
-                const response = await fetch('https://iothubgpstrackernopowerbi.azurewebsites.net/api/getLatestCoordinates');
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Error fetching coordinates:', error);
-                return null;
-            }
+      async function fetchLatestCoordinates() {
+    try {
+        const response = await fetch('https://iothubgpstrackernopowerbi.azurewebsites.net/api/getLatestCoordinates');
+        if (!response.ok) {
+            console.error('Error fetching coordinates:', response.status, response.statusText);
+            return null;
         }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching coordinates:', error);
+        return null;
+    }
+}
 
-        async function updateMap() {
-            const coordinates = await fetchLatestCoordinates();
-            if (coordinates) {
-                const map = L.map('map').setView([coordinates.latitude, coordinates.longitude], 15);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    maxZoom: 19,
-                }).addTo(map);
-                L.marker([coordinates.latitude, coordinates.longitude]).addTo(map)
-                    .bindPopup('Latest Location')
-                    .openPopup();
-            }
-        }
+async function updateMap() {
+    const coordinates = await fetchLatestCoordinates();
+    if (coordinates) {
+        const map = L.map('map').setView([coordinates.latitude, coordinates.longitude], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
+        L.marker([coordinates.latitude, coordinates.longitude]).addTo(map)
+            .bindPopup('Latest Location')
+            .openPopup();
+    }
+}
 
-        window.onload = updateMap;
+window.onload = updateMap;
+
     </script>
 </body>
 </html>
