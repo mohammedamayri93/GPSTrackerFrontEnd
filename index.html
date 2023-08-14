@@ -44,17 +44,17 @@
         async function updateMap() {
             const coordinates = await fetchLatestCoordinates();
             if (coordinates) {
-                const map = L.map('map').setView([coordinates.Latitude, coordinates.Longitude], 15);
+                const map = L.map('map').setView([coordinates.latitude, coordinates.longitude], 15);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     maxZoom: 19,
                 }).addTo(map);
-                L.marker([coordinates.Latitude, coordinates.Longitude]).addTo(map)
-                    .bindPopup(`<div class="popup-text">Latest Location</div><div>Latitude: ${coordinates.Latitude}</div><div>Longitude: ${coordinates.Longitude}</div>`)
+                L.marker([coordinates.latitude, coordinates.longitude]).addTo(map)
+                    .bindPopup(`<div class="popup-text">Latest Location</div><div>latitude: ${coordinates.latitude}</div><div>longitude: ${coordinates.longitude}</div>`)
                     .openPopup();
 
                 // Update last update time
                 const lastUpdateElement = document.getElementById('lastUpdate');
-                lastUpdateElement.textContent = `Last Update Time: ${new Date(coordinates.Timestamp).toLocaleTimeString()}`;
+                lastUpdateElement.textContent = `Last Update Time: ${new Date(coordinates.timestamp).toLocaleTimeString()}`;
             }
         }
 
